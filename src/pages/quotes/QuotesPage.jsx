@@ -338,7 +338,6 @@ const QuotesPage = () => {
 
                     <div>
                       <label className="text-sm">OEM</label>
-        
                       <input
                         type="text"
                         className="w-full px-3 py-2 text-xs bg-white border border-slate-300 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 text-slate-700 placeholder-slate-400 shadow-none"
@@ -347,15 +346,11 @@ const QuotesPage = () => {
 
                     <div>
                       <label className="text-sm">EAV</label>
-        
                       <input
                         type="text"
                         className="w-full px-3 py-2 text-xs bg-white border border-slate-300 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 text-slate-700 placeholder-slate-400 shadow-none"
                       />
                     </div>
-
-                    
-        
                   </div>
 
           <h2 className="text-sm font-semibold text-slate-900 mb-2">Tiered Pricing</h2>
