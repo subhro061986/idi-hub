@@ -2,15 +2,24 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SideMenu from "../../layout/SideMenu";
 import TopBar from "../../layout/TopBar";
+import { UserProfile } from "../../context/Usercontext";
+import { useAuth } from "../../context/Authcontext";
 
 const CustomerPage = () => {
   const navigate = useNavigate();
-  
+  const{authData}=useAuth();
+  const {GetAllCustomers } = UserProfile();
+  const [customers, setCustomers] = useState([]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+    fetchCustomers();
+  }, [authData]);
 
+  const fetchCustomers = async () => {
+    const response = await GetAllCustomers();
+    setCustomers(response?.data?.data || []);
+  }
   const gotoDetails = () => {
     navigate("/customer-details");
   }
@@ -66,20 +75,27 @@ const CustomerPage = () => {
                         <span className="material-icons-outlined">arrow_upward</span>
                       </div>
                     </th>
-                   
+
                     <th className="py-2.5 px-3 border-r border-slate-200 whitespace-nowrap">
+                      <div className="flex items-center gap-1.5 cursor-pointer">
+                        <span className="text-xs">Currency</span>
+                        <span className="material-icons-outlined">filter_list</span>
+                      </div>
+                    </th>
+                   
+                    {/* <th className="py-2.5 px-3 border-r border-slate-200 whitespace-nowrap">
                       <div className="flex items-center gap-1.5 cursor-pointer">
                         <span className="text-xs">HQ City</span>
                         <span className="material-icons-outlined">filter_list</span>
                       </div>
-                    </th>
+                    </th> */}
                     
-                    <th className="py-2.5 px-3 border-r border-slate-200 whitespace-nowrap">
+                    {/* <th className="py-2.5 px-3 border-r border-slate-200 whitespace-nowrap">
                       <div className="flex items-center gap-1.5 cursor-pointer">
                         <span className="text-xs">State</span>
                         <span className="material-icons-outlined">filter_list</span>
                       </div>
-                    </th>
+                    </th> */}
                     
                     <th className="py-2.5 px-3 border-r border-slate-200 whitespace-nowrap">
                       <div className="flex items-center gap-1.5 cursor-pointer">
@@ -107,46 +123,25 @@ const CustomerPage = () => {
                 </thead>
                 
                 <tbody className="divide-y divide-slate-200 text-slate-600 font-normal">
-                  
-                  <tr className="hover:bg-slate-50 transition-colors">
+                  {customers.map((customer,index) => (
+                  <tr className="hover:bg-slate-50 transition-colors" key={index}>
                     <td className="py-2 px-3 border-r border-slate-200 text-slate-700">
                         <span onClick={()=>gotoDetails()} className="cursor-pointer">
-                            1234897568
+                            {customer.number}
                         </span>
                     </td>
-                    <td className="py-2 px-3 border-r border-slate-200">Jeff Hansen</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Wend pyle</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Benicia</td>
-                    <td className="py-2 px-3 border-r border-slate-200">California</td>
-                    <td className="py-2 px-3 border-r border-slate-200">0</td>
-                    <td className="py-2 px-3 border-r border-slate-200">0</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">0</td>
+                    <td className="py-2 px-3 border-r border-slate-200">{customer.name}</td>
+                    <td className="py-2 px-3 border-r border-slate-200">{customer.salesRep}</td>
+                    <td className="py-2 px-3 border-r border-slate-200">{customer.currency}</td>
+                    {/* <td className="py-2 px-3 border-r border-slate-200">{customer.city}</td>
+                    <td className="py-2 px-3 border-r border-slate-200">California</td> */}
+                    <td className="py-2 px-3 border-r border-slate-200">{customer.credit}</td>
+                    <td className="py-2 px-3 border-r border-slate-200">{customer.ar}</td>
+                    <td className="py-2 px-3 border-r border-slate-200 text-center">{customer.arDays}</td>
                     
                   </tr>
+                  ))}
                   
-                  <tr className="hover:bg-slate-50 transition-colors">
-                    <td className="py-2 px-3 border-r border-slate-200 text-slate-700">1234897568</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Jeff Hansen</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Wend pyle</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Benicia</td>
-                    <td className="py-2 px-3 border-r border-slate-200">California</td>
-                    <td className="py-2 px-3 border-r border-slate-200">0</td>
-                    <td className="py-2 px-3 border-r border-slate-200">0</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">0</td>
-                    
-                  </tr>
-                  
-                  <tr className="hover:bg-slate-50 transition-colors">
-                    <td className="py-2 px-3 border-r border-slate-200 text-slate-700">1234897568</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Jeff Hansen</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Wend pyle</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Benicia</td>
-                    <td className="py-2 px-3 border-r border-slate-200">California</td>
-                    <td className="py-2 px-3 border-r border-slate-200">0</td>
-                    <td className="py-2 px-3 border-r border-slate-200">0</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">0</td>
-                    
-                  </tr>
                   
                   
                   

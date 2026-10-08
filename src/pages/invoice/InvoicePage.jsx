@@ -2,14 +2,23 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SideMenu from "../../layout/SideMenu";
 import TopBar from "../../layout/TopBar";
+import { UserProfile } from "../../context/Usercontext";
+import { useAuth } from "../../context/Authcontext";
 
 const InvoicePage = () => {
   const navigate = useNavigate();
-  
-
+  const{authData}=useAuth();
+  const {GetAllInvoices } = UserProfile();
+  const [invoices, setInvoices] = useState([]);
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+    fetchInvoices();
+  }, [authData]);
+
+  const fetchInvoices = async () => {
+    const response = await GetAllInvoices();
+    setInvoices(response?.data?.data || []);
+  }
 
   const gotoDetails = () => {
     navigate("/customer-details");
@@ -149,65 +158,31 @@ const InvoicePage = () => {
                 </thead>
                 
                 <tbody className="divide-y divide-slate-200 text-slate-600 font-normal">
-                  
-                  <tr className="hover:bg-slate-50 transition-colors">
+                  {invoices.splice(0,10).map((invoice, index) => (
+                  <tr className="hover:bg-slate-50 transition-colors" key={index}>
                     <td className="py-2 px-3 border-r border-slate-200 text-slate-700">
                         <span onClick={()=>gotoDetails()} className="cursor-pointer">
-                            1234897568
+                            {invoice.invoiceNo}
                         </span>
                     </td>
-                    <td className="py-2 px-3 border-r border-slate-200">Jeff Hansen</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Wend pyle</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Benicia</td>
-                    <td className="py-2 px-3 border-r border-slate-200">California</td>
-                    <td className="py-2 px-3 border-r border-slate-200">0</td>
-                    <td className="py-2 px-3 border-r border-slate-200">0</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">0</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">0</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">0</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">0</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">0</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">0</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">0</td>
+                    
+                    <td className="py-2 px-3 border-r border-slate-200">{invoice.orderNo}</td>
+                    <td className="py-2 px-3 border-r border-slate-200">{invoice.shipmentNo}</td>
+                    <td className="py-2 px-3 border-r border-slate-200">{invoice.customerName}</td>
+                    <td className="py-2 px-3 border-r border-slate-200">{invoice.salesRep}</td>
+                    <td className="py-2 px-3 border-r border-slate-200">{invoice.date}</td>
+                    <td className="py-2 px-3 border-r border-slate-200 text-center">{invoice.dueDate}</td>
+                    <td className="py-2 px-3 border-r border-slate-200 text-center">{invoice.amount}</td>
+                    <td className="py-2 px-3 border-r border-slate-200 text-center">{invoice.taxAmount}</td>
+                    <td className="py-2 px-3 border-r border-slate-200 text-center">{invoice.frightAmount}</td>
+                    <td className="py-2 px-3 border-r border-slate-200 text-center">{invoice.specialCharges}</td>
+                    <td className="py-2 px-3 border-r border-slate-200 text-center">{invoice.totalAmount}</td>
+                    <td className="py-2 px-3 border-r border-slate-200 text-center">{invoice.terms}</td>
+                    <td className="py-2 px-3 border-r border-slate-200 text-center">{invoice.status}</td>
                     
                   </tr>
+                  ))}
                   
-                  <tr className="hover:bg-slate-50 transition-colors">
-                    <td className="py-2 px-3 border-r border-slate-200 text-slate-700">1234897568</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Jeff Hansen</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Wend pyle</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Benicia</td>
-                    <td className="py-2 px-3 border-r border-slate-200">California</td>
-                    <td className="py-2 px-3 border-r border-slate-200">0</td>
-                    <td className="py-2 px-3 border-r border-slate-200">0</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">0</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">0</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">0</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">0</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">0</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">0</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">0</td>
-                    
-                    
-                  </tr>
-                  
-                  <tr className="hover:bg-slate-50 transition-colors">
-                    <td className="py-2 px-3 border-r border-slate-200 text-slate-700">1234897568</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Jeff Hansen</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Wend pyle</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Benicia</td>
-                    <td className="py-2 px-3 border-r border-slate-200">California</td>
-                    <td className="py-2 px-3 border-r border-slate-200">0</td>
-                    <td className="py-2 px-3 border-r border-slate-200">0</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">0</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">0</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">0</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">0</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">0</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">0</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">0</td>  
-                    
-                  </tr>
                   
                   
                   

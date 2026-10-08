@@ -2,15 +2,24 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SideMenu from "../../layout/SideMenu";
 import TopBar from "../../layout/TopBar";
+import { useAuth } from "../../context/Authcontext";
+import { UserProfile } from "../../context/Usercontext";
 
 const OrderPage = () => {
   const navigate = useNavigate();
-  
+  const{authData}=useAuth();
+  const {GetAllOrders } = UserProfile();
+  const [orders, setOrders] = useState([]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+    fetchOrders();
+  }, [authData]);
 
+  const fetchOrders = async () => {
+    const response = await GetAllOrders();
+    setOrders(response?.data?.data || []);
+  }
   const gotoDetails = () => {
     navigate("/customer-details");
   }
@@ -73,6 +82,13 @@ const OrderPage = () => {
                         <span className="material-icons-outlined">filter_list</span>
                       </div>
                     </th>
+
+                    <th className="py-2.5 px-3 border-r border-slate-200 whitespace-nowrap">
+                      <div className="flex items-center gap-1.5 cursor-pointer">
+                        <span className="text-xs">Sales Rep</span>
+                        <span className="material-icons-outlined">filter_list</span>
+                      </div>
+                    </th>
                     
                     <th className="py-2.5 px-3 border-r border-slate-200 whitespace-nowrap">
                       <div className="flex items-center gap-1.5 cursor-pointer">
@@ -97,43 +113,24 @@ const OrderPage = () => {
                 </thead>
                 
                 <tbody className="divide-y divide-slate-200 text-slate-600 font-normal">
-                  
-                  <tr className="hover:bg-slate-50 transition-colors">
+                  {orders.map((order, index) => (
+                  <tr className="hover:bg-slate-50 transition-colors" key={index}>
                     <td className="py-2 px-3 border-r border-slate-200 text-slate-700">
                         <span onClick={()=>gotoDetails()} className="cursor-pointer">
-                            1234897568
+                            {order.orderNo}
                         </span>
                     </td>
-                    <td className="py-2 px-3 border-r border-slate-200">Jeff Hansen</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Wend pyle</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Benicia</td>
-                    <td className="py-2 px-3 border-r border-slate-200">California</td>
-                    <td className="py-2 px-3 border-r border-slate-200">0</td>
+                    <td className="py-2 px-3 border-r border-slate-200">{order.customerName}</td>
+                    <td className="py-2 px-3 border-r border-slate-200">{order.contactName}</td>
+                    <td className="py-2 px-3 border-r border-slate-200">{order.acctMgr}</td>
+                    <td className="py-2 px-3 border-r border-slate-200">{order.salesRepName}</td>
+                    <td className="py-2 px-3 border-r border-slate-200">{order.customerPo}</td>
+                    <td className="py-2 px-3 border-r border-slate-200">{order.sales}</td>
                     
                     
                   </tr>
-                  
-                  <tr className="hover:bg-slate-50 transition-colors">
-                    <td className="py-2 px-3 border-r border-slate-200 text-slate-700">1234897568</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Jeff Hansen</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Wend pyle</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Benicia</td>
-                    <td className="py-2 px-3 border-r border-slate-200">California</td>
-                    <td className="py-2 px-3 border-r border-slate-200">0</td>
-                    
-                    
-                  </tr>
-                  
-                  <tr className="hover:bg-slate-50 transition-colors">
-                    <td className="py-2 px-3 border-r border-slate-200 text-slate-700">1234897568</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Jeff Hansen</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Wend pyle</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Benicia</td>
-                    <td className="py-2 px-3 border-r border-slate-200">California</td>
-                    <td className="py-2 px-3 border-r border-slate-200">0</td>
-                    
-                    
-                  </tr>
+                  ))}
+                 
                   
                   
                   

@@ -3,13 +3,25 @@ import { useNavigate } from "react-router-dom";
 import SideMenu from "../../layout/SideMenu";
 import TopBar from "../../layout/TopBar";
 import Modal from "../../Common/Modal";
+import { useAuth } from "../../context/Authcontext";
+import { UserProfile } from "../../context/Usercontext";
 const ContactPage = () => {
   const navigate = useNavigate();
+  const{authData}=useAuth();
+  const { GetAllContacts } = UserProfile();
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [contactList, setContactList] = useState([]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+    handleGetContacts();
+  }, [authData]);
+
+  const handleGetContacts = async () => {
+    const response = await GetAllContacts();
+    console.log("Contacts Response", response?.data?.data);
+    setContactList(response?.data?.data || []);
+  };
 
   const resetStockModal=()=>{
     setShowCreateModal(false)
@@ -109,15 +121,17 @@ const ContactPage = () => {
                 </thead>
                 
                 <tbody className="divide-y divide-slate-200 text-slate-600 font-normal">
-                  
-                  <tr className="hover:bg-slate-50 transition-colors">
-                    <td className="py-2 px-3 border-r border-slate-200 text-slate-700">Dave Holmes</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Engineered Composites INC</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Procurement</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Manager</td>
-                    <td className="py-2 px-3 border-r border-slate-200">1234897568</td>
-                    <td className="py-2 px-3 border-r border-slate-200">daveholmes@engcomposites.com</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Engineered Composites INC, 55 Roberts Ave.,</td>
+                  {
+                    contactList.map((contact, index) => (
+                      <tr key={index} className="hover:bg-slate-50 transition-colors">
+                        <td className="py-2 px-3 border-r border-slate-200 text-slate-700">{contact.name}</td>
+                        <td className="py-2 px-3 border-r border-slate-200">{contact.customerName}</td>
+                        <td className="py-2 px-3 border-r border-slate-200">{contact.department}</td>
+                        <td className="py-2 px-3 border-r border-slate-200">{contact.jobTitle}</td>
+                    
+                    <td className="py-2 px-3 border-r border-slate-200">{contact.phone}</td>
+                    <td className="py-2 px-3 border-r border-slate-200">{contact.email}</td>
+                    <td className="py-2 px-3 border-r border-slate-200">{contact.address}</td>
                     <td className="py-2 px-3 border-r border-slate-200 text-center">
                       <div className="inline-flex items-center justify-center">
                         <span className="w-8 h-4 flex items-center bg-emerald-500 rounded-full p-0.5 cursor-pointer">
@@ -126,209 +140,13 @@ const ContactPage = () => {
                       </div>
                     </td>
                     <td className="py-2 px-3 text-center">
-                      <button className="text-slate-400 hover:text-slate-700 inline-flex items-center">
+                      <button className="text-slate-400 hover:text-slate-700 inline-flex items-center cursor-pointer">
                       <span className="material-icons-outlined">edit_note</span>
                       </button>
                     </td>
                   </tr>
+                    ))}
                   
-                  <tr className="hover:bg-slate-50 transition-colors">
-                    <td className="py-2 px-3 border-r border-slate-200 text-slate-700">Jeff Hansen</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Engineered Composites INC</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Procurement</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Head of Procurment</td>
-                    <td className="py-2 px-3 border-r border-slate-200">1234897568</td>
-                    <td className="py-2 px-3 border-r border-slate-200">jefholmes@engcomposites.com</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Engineered Composites INC, 55 Roberts Ave.,</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">
-                      <div className="inline-flex items-center justify-center">
-                        <span className="w-8 h-4 flex items-center bg-emerald-500 rounded-full p-0.5 cursor-pointer">
-                          <span className="bg-white w-3 h-3 rounded-full shadow-md transform translate-x-4 transition-transform"></span>
-                        </span>
-                      </div>
-                    </td>
-                    <td className="py-2 px-3 text-center">
-                      <button className="text-slate-400 hover:text-slate-700 inline-flex items-center">
-                        <span className="material-icons-outlined">edit_note</span>
-                      </button>
-                    </td>
-                  </tr>
-                  
-                  <tr className="hover:bg-slate-50 transition-colors">
-                    <td className="py-2 px-3 border-r border-slate-200 text-slate-700">Eve Robertson</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Engineered Composites INC</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Procurement</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Manager</td>
-                    <td className="py-2 px-3 border-r border-slate-200">1234897568</td>
-                    <td className="py-2 px-3 border-r border-slate-200">daveholmes@engcomposites.com</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Engineered Composites INC, 55 Roberts Ave.,</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">
-                      <div className="inline-flex items-center justify-center">
-                        <span className="w-8 h-4 flex items-center bg-[#D4143D] rounded-full p-0.5 cursor-pointer">
-                          <span className="bg-white w-3 h-3 rounded-full shadow-md transform translate-x-4 transition-transform"></span>
-                        </span>
-                      </div>
-                    </td>
-                    <td className="py-2 px-3 text-center">
-                      <button className="text-slate-400 hover:text-slate-700 inline-flex items-center">
-                        <span className="material-icons-outlined">edit_note</span>
-                      </button>
-                    </td>
-                  </tr>
-                  
-                  <tr className="hover:bg-slate-50 transition-colors">
-                    <td className="py-2 px-3 border-r border-slate-200 text-slate-700">Marlene Rosario</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Engineered Composites INC</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Procurement</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Manager</td>
-                    <td className="py-2 px-3 border-r border-slate-200">1234897568</td>
-                    <td className="py-2 px-3 border-r border-slate-200">daveholmes@engcomposites.com</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Engineered Composites INC, 55 Roberts Ave.,</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">
-                      <div className="inline-flex items-center justify-center">
-                        <span className="w-8 h-4 flex items-center bg-emerald-500 rounded-full p-0.5 cursor-pointer">
-                          <span className="bg-white w-3 h-3 rounded-full shadow-md transform translate-x-4 transition-transform"></span>
-                        </span>
-                      </div>
-                    </td>
-                    <td className="py-2 px-3 text-center">
-                      <button className="text-slate-400 hover:text-slate-700 inline-flex items-center">
-                        <span className="material-icons-outlined">edit_note</span>
-                      </button>
-                    </td>
-                  </tr>
-                  
-                  <tr className="hover:bg-slate-50 transition-colors">
-                    <td className="py-2 px-3 border-r border-slate-200 text-slate-700">Ethel Morrison</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Engineered Composites INC</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Procurement</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Head of Procurment</td>
-                    <td className="py-2 px-3 border-r border-slate-200">1234897568</td>
-                    <td className="py-2 px-3 border-r border-slate-200">jefholmes@engcomposites.com</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Engineered Composites INC, 55 Roberts Ave.,</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">
-                      <div className="inline-flex items-center justify-center">
-                        <span className="w-8 h-4 flex items-center bg-emerald-500 rounded-full p-0.5 cursor-pointer">
-                          <span className="bg-white w-3 h-3 rounded-full shadow-md transform translate-x-4 transition-transform"></span>
-                        </span>
-                      </div>
-                    </td>
-                    <td className="py-2 px-3 text-center">
-                      <button className="text-slate-400 hover:text-slate-700 inline-flex items-center">
-                        <span className="material-icons-outlined">edit_note</span>
-                      </button>
-                    </td>
-                  </tr>
-                 
-                  <tr className="hover:bg-slate-50 transition-colors">
-                    <td className="py-2 px-3 border-r border-slate-200 text-slate-700">Rafael Villegas</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Engineered Composites INC</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Procurement</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Manager</td>
-                    <td className="py-2 px-3 border-r border-slate-200">1234897568</td>
-                    <td className="py-2 px-3 border-r border-slate-200">daveholmes@engcomposites.com</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Engineered Composites INC, 55 Roberts Ave.,</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">
-                      <div className="inline-flex items-center justify-center">
-                        <span className="w-8 h-4 flex items-center bg-emerald-500 rounded-full p-0.5 cursor-pointer">
-                          <span className="bg-white w-3 h-3 rounded-full shadow-md transform translate-x-4 transition-transform"></span>
-                        </span>
-                      </div>
-                    </td>
-                    <td className="py-2 px-3 text-center">
-                      <button className="text-slate-400 hover:text-slate-700 inline-flex items-center">
-                        <span className="material-icons-outlined">edit_note</span>
-                      </button>
-                    </td>
-                  </tr>
-                  
-                  <tr className="hover:bg-slate-50 transition-colors">
-                    <td className="py-2 px-3 border-r border-slate-200 text-slate-700">Lottie Durham</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Engineered Composites INC</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Procurement</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Manager</td>
-                    <td className="py-2 px-3 border-r border-slate-200">1234897568</td>
-                    <td className="py-2 px-3 border-r border-slate-200">daveholmes@engcomposites.com</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Engineered Composites INC, 55 Roberts Ave.,</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">
-                      <div className="inline-flex items-center justify-center">
-                        <span className="w-8 h-4 flex items-center bg-emerald-500 rounded-full p-0.5 cursor-pointer">
-                          <span className="bg-white w-3 h-3 rounded-full shadow-md transform translate-x-4 transition-transform"></span>
-                        </span>
-                      </div>
-                    </td>
-                    <td className="py-2 px-3 text-center">
-                      <button className="text-slate-400 hover:text-slate-700 inline-flex items-center">
-                        <span className="material-icons-outlined">edit_note</span>
-                      </button>
-                    </td>
-                  </tr>
-                  
-                  <tr className="hover:bg-slate-50 transition-colors">
-                    <td className="py-2 px-3 border-r border-slate-200 text-slate-700">Ana Hendrix</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Engineered Composites INC</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Procurement</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Head of Procurment</td>
-                    <td className="py-2 px-3 border-r border-slate-200">1234897568</td>
-                    <td className="py-2 px-3 border-r border-slate-200">jefholmes@engcomposites.com</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Engineered Composites INC, 55 Roberts Ave.,</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">
-                      <div className="inline-flex items-center justify-center">
-                        <span className="w-8 h-4 flex items-center bg-[#D4143D] rounded-full p-0.5 cursor-pointer">
-                          <span className="bg-white w-3 h-3 rounded-full shadow-md transform translate-x-4 transition-transform"></span>
-                        </span>
-                      </div>
-                    </td>
-                    <td className="py-2 px-3 text-center">
-                      <button className="text-slate-400 hover:text-slate-700 inline-flex items-center">
-                        <span className="material-icons-outlined">edit_note</span>
-                      </button>
-                    </td>
-                  </tr>
-                  
-                  <tr className="hover:bg-slate-50 transition-colors">
-                    <td className="py-2 px-3 border-r border-slate-200 text-slate-700">Heriberto Adams</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Engineered Composites INC</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Procurement</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Manager</td>
-                    <td className="py-2 px-3 border-r border-slate-200">1234897568</td>
-                    <td className="py-2 px-3 border-r border-slate-200">daveholmes@engcomposites.com</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Engineered Composites INC, 55 Roberts Ave.,</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">
-                      <div className="inline-flex items-center justify-center">
-                        <span className="w-8 h-4 flex items-center bg-emerald-500 rounded-full p-0.5 cursor-pointer">
-                          <span className="bg-white w-3 h-3 rounded-full shadow-md transform translate-x-4 transition-transform"></span>
-                        </span>
-                      </div>
-                    </td>
-                    <td className="py-2 px-3 text-center">
-                      <button className="text-slate-400 hover:text-slate-700 inline-flex items-center">
-                        <span className="material-icons-outlined">edit_note</span>
-                      </button>
-                    </td>
-                  </tr>
-                  
-                  <tr className="hover:bg-slate-50 transition-colors">
-                    <td className="py-2 px-3 border-r border-slate-200 text-slate-700">Jeff Hansen</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Engineered Composites INC</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Procurement</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Head of Procurment</td>
-                    <td className="py-2 px-3 border-r border-slate-200">1234897568</td>
-                    <td className="py-2 px-3 border-r border-slate-200">jefholmes@engcomposites.com</td>
-                    <td className="py-2 px-3 border-r border-slate-200">Engineered Composites INC, 55 Roberts Ave.,</td>
-                    <td className="py-2 px-3 border-r border-slate-200 text-center">
-                      <div className="inline-flex items-center justify-center">
-                        <span className="w-8 h-4 flex items-center bg-emerald-500 rounded-full p-0.5 cursor-pointer">
-                          <span className="bg-white w-3 h-3 rounded-full shadow-md transform translate-x-4 transition-transform"></span>
-                        </span>
-                      </div>
-                    </td>
-                    <td className="py-2 px-3 text-center">
-                      <button className="text-slate-400 hover:text-slate-700 inline-flex items-center">
-                        <span className="material-icons-outlined">edit_note</span>
-                      </button>
-                    </td>
-                  </tr>
                 </tbody>
               </table>
             </div>

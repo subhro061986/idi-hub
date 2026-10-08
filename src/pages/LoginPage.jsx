@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo_idi_full.png";
+import { useAuth } from "../context/Authcontext";
 
 const LoginPage = () => {
+  const{logIn,authData,authDeatils,userId,userDetails}=useAuth();
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
   
 
@@ -11,13 +15,21 @@ const LoginPage = () => {
   }, []);
 
   const handleSubmit = async () => {
+   // navigate("/contact");
+    const loginData = {
+      "email": userName,
+      "password": password
+    };
+    try {
+      const resp=await logIn(loginData);
+      console.log("Login Response", resp);
       navigate("/contact");
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
   };
 
-  const goToRegistration = () => {
-    navigate("/register");
-  }
-
+  
   return (
     <>
       <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900 transition-colors duration-300 px-4 py-6">
@@ -49,10 +61,11 @@ const LoginPage = () => {
               </label>
               <div className="relative">
                 <input
-                  value=""
+                  value={userName}
                   className="w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl outline-none text-slate-900 dark:text-white"
                   placeholder="Your Email ID"
                   type="text"
+                  onChange={(e) => setUserName(e.target.value)}
                 />
                 
               </div>
@@ -65,10 +78,11 @@ const LoginPage = () => {
               </label>
               <div className="relative">
                 <input
-                  value=""
+                  value={password}
                   className="w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl outline-none text-slate-900 dark:text-white"
                   placeholder="Enter your password"
                   type="password"
+                  onChange={(e) => setPassword(e.target.value)}
                 />
 
                

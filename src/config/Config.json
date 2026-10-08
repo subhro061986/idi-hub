@@ -1,0 +1,9 @@
+{
+  "API_URL": "http://192.168.76.5:81/",
+  "LOGIN_API": "Auth/Signin",
+  "GET_CONTACTS_API": "Contact/GetAll",
+  "GET_ALL_CUSTOMERS_API": "Customer/GetAll",
+  "GET_ALL_ORDERS_API": "Order/GetAll",
+  "GET_ALL_SHIPMENTS_API": "Shipment/GetAll",
+  "GET_ALL_INVOICES_API": "Invoice/GetAll"
+}
